@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tubandev.budgetnikah.R;
@@ -23,9 +24,11 @@ import butterknife.ButterKnife;
 public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolder> {
 
     private List<Data> dataList;
+    private OnItemClickListerner listerner;
 
-    public AdapterData(List<Data> dataList) {
+    public AdapterData(List<Data> dataList, OnItemClickListerner listerner) {
         this.dataList = dataList;
+        this.listerner = listerner;
     }
 
     @Override
@@ -45,19 +48,25 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolder> {
         return dataList.size();
     }
 
+    public interface OnItemClickListerner {
+        void onClick(Data data);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.textKet)
         TextView textKet;
         @BindView(R.id.textNominal)
         TextView textNominal;
+        @BindView(R.id.imageDelete)
+        ImageView imageDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(Data data) {
+        public void bindData(final Data data) {
             textKet.setText(data.getKeterangan());
 
             int nominal = Integer.parseInt(data.getNominal());
@@ -69,6 +78,13 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolder> {
             kursIndonesia.setDecimalFormatSymbols(formatRp);
             String price = kursIndonesia.format(nominal).replace("-00", "");
             textNominal.setText("Rp. " + price);
+
+            imageDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listerner.onClick(data);
+                }
+            });
         }
     }
 }

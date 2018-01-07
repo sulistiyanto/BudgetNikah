@@ -11,12 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tubandev.budgetnikah.R;
+import com.tubandev.budgetnikah.model.Data;
 import com.tubandev.budgetnikah.utils.ConnectionNetwork;
 
 import butterknife.BindView;
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 .setCancelable(false)
                 .setPositiveButton("Tambah",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 String ket = etKet.getText().toString();
                                 String nominal = etNominal.getText().toString();
                                 dialog.cancel();
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                         })
                 .setNegativeButton("Batal",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         recyclerView.setAdapter(adapterData);
         getSupportActionBar().setSubtitle("Budget : " + budgetRp);
         textKeluar.setText("Keluar : " + keluarRp);
-        textSisa.setText("Sisa : " +sisaRp);
+        textSisa.setText("Sisa : " + sisaRp);
     }
 
     @Override
@@ -130,5 +133,49 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void loadData() {
         presenter.loadData(connectionNetwork.isConnecting(this));
+    }
+
+    @Override
+    public void showDialogDelete(final Data data) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Yakin ingin hapus data " + data.getKeterangan());
+        alertDialogBuilder.setPositiveButton("Hapus",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        delete(data.getId());
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("Batal",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
+
+    private void delete(String id) {
+        presenter.delete(connectionNetwork.isConnecting(this), id);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                presenter.loadData(connectionNetwork.isConnecting(this));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

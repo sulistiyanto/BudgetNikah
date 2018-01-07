@@ -7,4 +7,5 @@ package com.tubandev.budgetnikah.ui;
 public interface MainPresenter {
     void loadData(boolean connecting);
     void savedata(boolean connecting, String ket, String nominal);
+    void delete(boolean connecting, String id);
 }

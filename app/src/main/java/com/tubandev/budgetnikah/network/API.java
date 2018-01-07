@@ -21,4 +21,8 @@ public interface API {
     @POST("add.php")
     Call<ResultData> save(@Field("keterangan") String keterangan,
                           @Field("nominal") String nominal);
+
+    @FormUrlEncoded
+    @POST("delete.php")
+    Call<ResultData> delete(@Field("id") String id);
 }
