@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 import com.tubandev.budgetnikah.R;
 import com.tubandev.budgetnikah.model.Data;
 import com.tubandev.budgetnikah.utils.ConnectionNetwork;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private MainPresenter presenter;
     private ConnectionNetwork connectionNetwork;
 
+
+    Character s = 'a';
+    Character d = 'd';
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,30 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         presenter = new IMainPresenter(this);
         presenter.loadData(connectionNetwork.isConnecting(this));
+        Log.d("s", Character.isUpperCase(s.charValue()) + "");
+        character('c', 'a');
+    }
+
+    private Character character(Character a, Character b) {
+        Character c = null;
+        if (Character.isUpperCase(a) && Character.isUpperCase(b)) {
+            System.out.print(compareCharacter(a, b) +"");
+        } else if (Character.isLowerCase(a) && Character.isLowerCase(b)) {
+            System.out.print(compareCharacter(a, b) +"");
+        } else {
+            System.out.print("The character must be in Letter case");
+        }
+        return c;
+    }
+
+    private Character compareCharacter(Character a, Character b) {
+        Character c;
+        if (a > b) {
+            c = b;
+        } else {
+            c = a;
+        }
+        return c;
     }
 
     @OnClick(R.id.fab)
@@ -161,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void delete(String id) {
         presenter.delete(connectionNetwork.isConnecting(this), id);
+
     }
 
     @Override

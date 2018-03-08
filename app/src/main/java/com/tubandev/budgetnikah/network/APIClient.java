@@ -19,7 +19,7 @@ public class APIClient {
 
     private static Retrofit retrofit = null;
     private static OkHttpClient client;
-    private static String URL = "http://pasorder.com/vote/";
+    private static String URL = "http://tubandev.com/vote/";
 
     private static Retrofit getClient(String url) {
         Gson gson = new GsonBuilder()
